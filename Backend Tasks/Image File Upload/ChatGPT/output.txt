@@ -1,0 +1,80 @@
+To handle image file uploads in PHP, we'll create a script that performs the following:
+
+1. **Check if the file has been uploaded via HTTP POST** to ensure the file was uploaded through a form.
+2. **Validate the file type** to accept only JPEG and PNG images.
+3. **Check the file size** to ensure it does not exceed 5MB.
+4. **Move the uploaded file** to a specified directory on the server.
+
+Here’s a basic example of how this could be implemented in PHP:
+
+```php
+<?php
+// Directory where the file will be stored
+$targetDirectory = "uploads/";
+// Ensure the directory exists
+if (!file_exists($targetDirectory)) {
+    mkdir($targetDirectory, 0777, true);
+}
+
+// Check if the file has been uploaded via POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
+    $file = $_FILES['image'];
+
+    // Check for upload errors
+    if ($file['error'] != 0) {
+        die("Error uploading file: " . $file['error']);
+    }
+
+    // Validate file size (5MB maximum)
+    $maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if ($file['size'] > $maxSize) {
+        die("Error: File size is larger than the allowed limit.");
+    }
+
+    // Validate file type (JPEG and PNG)
+    $validTypes = ['image/jpeg', 'image/png'];
+    if (!in_array($file['type'], $validTypes)) {
+        die("Error: Invalid file type. Only JPEG and PNG are allowed.");
+    }
+
+    // Set the target path for storing the file
+    $targetFilePath = $targetDirectory . basename($file['name']);
+
+    // Move the file from the temporary location to the target directory
+    if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+        echo "File uploaded successfully to {$targetFilePath}";
+    } else {
+        die("Error moving the uploaded file.");
+    }
+} else {
+    die("No file uploaded or invalid request.");
+}
+
+?>
+```
+
+**How to Use This Script:**
+
+1. **Create an HTML Form for File Upload:**
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Upload an Image</title>
+    </head>
+    <body>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            Select image to upload:
+            <input type="file" name="image" id="image">
+            <input type="submit" value="Upload Image">
+        </form>
+    </body>
+    </html>
+    ```
+
+2. **Adjust the PHP Script:**
+    - Change `$targetDirectory` to the path where you want to store the uploaded files.
+    - Make sure the directory has the appropriate permissions to write files.
+
+This script checks the necessary criteria and moves the file to the specified directory, handling common errors.

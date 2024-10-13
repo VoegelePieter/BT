@@ -1,0 +1,93 @@
+GitHub Copilot: ### Plan
+
+1. **HTML Structure**:
+   - Create a container for the product card.
+   - Add an image element for the product image.
+   - Add a title element for the product title.
+   - Add a paragraph element for the product description.
+   - Add a button element for the action button.
+
+2. **CSS Styling**:
+   - Style the container to have a border, padding, and margin.
+   - Style the image to fit within the container.
+   - Style the title, description, and button to have appropriate spacing and alignment.
+
+### HTML and CSS Code
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Card Component</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="product-card">
+        <img src="product-image.jpg" alt="Product Image" class="product-image">
+        <h2 class="product-title">Product Title</h2>
+        <p class="product-description">This is a brief description of the product.</p>
+        <button class="product-button">Buy Now</button>
+    </div>
+</body>
+</html>
+```
+
+```css
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    text-align: center;
+}
+
+.product-image {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.product-title {
+    font-size: 1.5em;
+    margin: 16px 0 8px;
+}
+
+.product-description {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.product-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.product-button:hover {
+    background-color: #0056b3;
+}
+```
+
+### Usage
+
+To reuse the product card component with different product data, you can duplicate the `.product-card` div and change the content inside each element (image source, title, description, and button text).

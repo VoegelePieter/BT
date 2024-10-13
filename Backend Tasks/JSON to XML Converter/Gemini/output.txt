@@ -1,0 +1,52 @@
+```php
+<?php
+
+// Function to convert JSON to XML
+function jsonToXml($json) {
+    $xml = new SimpleXMLElement('<root/>');
+    arrayToXml($json, $xml);
+    return $xml->asXML();
+}
+
+// Helper function to convert arrays to XML
+function arrayToXml($array, &$xml) {
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $subnode = $xml->addChild($key);
+            arrayToXml($value, $subnode);
+        } else {
+            $xml->addChild($key, htmlspecialchars($value));
+        }
+    }
+}
+
+// Get JSON data from the frontend
+$jsonData = json_decode(file_get_contents('php://input'), true);
+
+// Check if JSON data is valid
+if (json_last_error() !== JSON_ERROR_NONE) {
+    // Handle invalid JSON input
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid JSON data']);
+    exit;
+}
+
+// Convert JSON to XML
+$xmlData = jsonToXml($jsonData);
+
+// Return XML response to the frontend
+header('Content-Type: text/xml');
+echo $xmlData;
+```
+
+This PHP script performs the following steps:
+
+1. **Defines functions:**
+   - `jsonToXml`: Converts JSON data to XML using `SimpleXMLElement`.
+   - `arrayToXml`: Recursively converts arrays to XML elements.
+2. **Gets JSON data:** Uses `file_get_contents('php://input')` to retrieve JSON data from the frontend.
+3. **Checks JSON validity:** Uses `json_last_error()` to check for JSON errors. If invalid, returns an error response with a 400 status code.
+4. **Converts JSON to XML:** Calls `jsonToXml` to convert the JSON data to XML.
+5. **Sends XML response:** Sets the content type to `text/xml` and echoes the XML data to the frontend.
+
+To use this script, you can send a POST request to the PHP script with JSON data in the request body. The script will convert the JSON to XML and return the XML response.

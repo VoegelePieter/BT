@@ -1,0 +1,45 @@
+.product-card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px; /* Fixed width, but can be adjusted or made responsive */
+    margin: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.product-image {
+    width: 100%; /* Makes the image stretch to fit the container */
+    height: 200px; /* Fixed height for consistency */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.product-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.product-description {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    padding: 0 10px;
+}
+
+.product-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.product-button:hover {
+    background-color: #0056b3;
+}

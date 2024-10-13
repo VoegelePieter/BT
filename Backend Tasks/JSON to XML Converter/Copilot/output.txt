@@ -1,0 +1,60 @@
+GitHub Copilot: ### Plan
+
+1. Create a PHP script that:
+   - Reads JSON data from the request body.
+   - Decodes the JSON data.
+   - Checks for JSON decoding errors.
+   - Converts the decoded JSON data to XML format.
+   - Returns the XML response.
+   - Handles errors for invalid JSON input.
+
+### PHP Code
+
+```php
+<?php
+header('Content-Type: application/json');
+
+function jsonToXml($data, $rootElement = null, $xml = null) {
+    if ($xml === null) {
+        $xml = new SimpleXMLElement($rootElement !== null ? $rootElement : '<root/>');
+    }
+
+    foreach ($data as $key => $value) {
+        if (is_array($value)) {
+            jsonToXml($value, $key, $xml->addChild($key));
+        } else {
+            $xml->addChild($key, htmlspecialchars($value));
+        }
+    }
+
+    return $xml->asXML();
+}
+
+try {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('Invalid JSON input: ' . json_last_error_msg());
+    }
+
+    $xml = jsonToXml($data);
+    header('Content-Type: application/xml');
+    echo $xml;
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode(['error' => $e->getMessage()]);
+}
+?>
+```
+
+### Explanation
+
+1. **Header Setup**: Set the content type to JSON initially.
+2. **Function `jsonToXml`**: Recursively converts JSON data to XML.
+3. **Read JSON Input**: Use `file_get_contents('php://input')` to read the raw POST data.
+4. **Decode JSON**: Use `json_decode` to convert JSON to an associative array.
+5. **Error Handling**: Check for JSON decoding errors using `json_last_error` and `json_last_error_msg`.
+6. **Convert to XML**: Call `jsonToXml` to convert the array to XML.
+7. **Return XML**: Set the content type to XML and echo the XML string.
+8. **Exception Handling**: Catch exceptions and return a JSON error message with a 400 status code.

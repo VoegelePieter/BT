@@ -1,0 +1,92 @@
+GitHub Copilot: ### Plan
+
+1. **HTML Form**: Create an HTML form to allow users to upload an image file.
+2. **PHP Script**: Write a PHP script to handle the file upload.
+   - **File Validation**:
+     - Check if the file is a valid image (JPEG or PNG).
+     - Ensure the file size does not exceed 5MB.
+   - **File Storage**:
+     - Move the uploaded file to a specified directory on the server.
+
+### HTML Form
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="file">Choose an image to upload (JPEG or PNG, max 5MB):</label>
+        <input type="file" name="file" id="file" accept="image/jpeg, image/png" required>
+        <button type="submit">Upload Image</button>
+    </form>
+</body>
+</html>
+```
+
+### PHP Script (upload.php)
+
+```php
+<?php
+// Directory where the uploaded files will be saved
+$target_dir = "uploads/";
+
+// Ensure the uploads directory exists
+if (!is_dir($target_dir)) {
+    mkdir($target_dir, 0777, true);
+}
+
+// Check if the form was submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $file = $_FILES['file'];
+
+    // Check if file was uploaded without errors
+    if ($file['error'] == UPLOAD_ERR_OK) {
+        $file_name = basename($file['name']);
+        $file_size = $file['size'];
+        $file_tmp = $file['tmp_name'];
+        $file_type = mime_content_type($file_tmp);
+
+        // Validate file type (JPEG or PNG)
+        $allowed_types = ['image/jpeg', 'image/png'];
+        if (!in_array($file_type, $allowed_types)) {
+            echo "Error: Only JPEG and PNG files are allowed.";
+            exit;
+        }
+
+        // Validate file size (max 5MB)
+        $max_size = 5 * 1024 * 1024; // 5MB in bytes
+        if ($file_size > $max_size) {
+            echo "Error: File size exceeds 5MB.";
+            exit;
+        }
+
+        // Move the uploaded file to the target directory
+        $target_file = $target_dir . $file_name;
+        if (move_uploaded_file($file_tmp, $target_file)) {
+            echo "The file " . htmlspecialchars($file_name) . " has been uploaded successfully.";
+        } else {
+            echo "Error: There was an error uploading your file.";
+        }
+    } else {
+        echo "Error: " . $file['error'];
+    }
+} else {
+    echo "No file uploaded.";
+}
+?>
+```
+
+### Explanation
+
+1. **HTML Form**: The form uses `enctype="multipart/form-data"` to handle file uploads and specifies `POST` as the method.
+2. **PHP Script**:
+   - Checks if the form was submitted using `POST`.
+   - Validates the file type using `mime_content_type()`.
+   - Checks the file size to ensure it does not exceed 5MB.
+   - Moves the uploaded file to the specified directory using `move_uploaded_file()`.
+   - Provides feedback to the user based on the success or failure of the upload process.

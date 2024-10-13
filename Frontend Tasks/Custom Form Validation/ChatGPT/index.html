@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Validation Example</title>
+<script src="formValidation.js"></script>
+</head>
+<body>
+<form id="myForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required><br>
+
+    <label for="number">Number (1-100):</label>
+    <input type="number" id="number" min="1" max="100" required><br>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" required><br>
+
+    <label for="url">Website:</label>
+    <input type="url" id="url" required><br>
+
+    <label for="agree">I agree to the terms:</label>
+    <input type="checkbox" id="agree" required><br>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
